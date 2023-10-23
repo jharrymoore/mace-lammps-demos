@@ -1,0 +1,26 @@
+# LAMMPS input script for protein simulation with AMBER14 force field
+# Set up the simulation box
+units real
+dimension 3
+boundary f f f
+atom_style atomic
+atom_modify map yes
+newton on
+# Read the PDB file
+read_data ala_dipeptide.lmpdat
+# Define the force field
+pair_style mace no_domain_decomposition
+pair_coeff * * SPICE_sm_inv_neut_E0_swa.model-lammps.pt H C N O F P S Cl Br I
+# Define the simulation settings
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+# Set up energy minimization
+# minimize 0.0 1.0e-8 1000 100000
+# Equilibrate the system
+velocity all create 300.0 12345
+dump dumpXYZ all xyz 1 lammps-dump_file.xyz
+fix 1 all nvt temp 300.0 300.0 100.0
+timestep 0.5
+run 10000
+# Save the final configuration
+write_data final_configuration.pdb
