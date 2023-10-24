@@ -10,15 +10,15 @@ newton on
 read_data ala_dipeptide.lmpdat
 # Define the force field
 pair_style mace no_domain_decomposition
-pair_coeff * * SPICE_sm_inv_neut_E0_swa.model-lammps.pt H C N O F P S Cl Br I
+pair_coeff * * SPICE_medium_neut_E0.model-lammps.pt H C N O F P S Cl Br I
 # Define the simulation settings
 neighbor 2.0 bin
 neigh_modify delay 0 every 1 check yes
 # Set up energy minimization
-# minimize 0.0 1.0e-8 1000 100000
+minimize 1.0e-6 1.0e-8 1000 10000 
 # Equilibrate the system
 velocity all create 300.0 12345
-dump dumpXYZ all xyz 1 lammps-dump_file.xyz
+dump dumpXYZ all xyz 100 lammps-dump_file.xyz
 fix 1 all nvt temp 300.0 300.0 100.0
 timestep 0.5
 run 10000
